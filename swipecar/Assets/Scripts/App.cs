@@ -30,7 +30,12 @@ public class App : MonoBehaviour
 
     private void Update()
     {
+        MousePointer();
 
+    }
+
+    public void MousePointer()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             Apos = Input.mousePosition;
@@ -42,7 +47,6 @@ public class App : MonoBehaviour
             Debug.Log(Bpos);
             Vector3 Cpos = Bpos - Apos;
             Debug.Log(Cpos);
-            DrawArrow.ForDebug(Apos, Cpos, 100, Color.yellow, ArrowType.Solid);
         }
     }
 }
