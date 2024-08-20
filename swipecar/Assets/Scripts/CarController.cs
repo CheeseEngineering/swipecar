@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class CarController : MonoBehaviour
@@ -19,6 +20,7 @@ public class CarController : MonoBehaviour
         touchScreenGo = GameObject.Find("touchScreen");
         // 게임 오브젝트에서 컴포넌트화 되어있는 스크립트 인스턴스화
         app = touchScreenGo.GetComponent<App>();
+        
     }
     void Update()
     {
@@ -32,14 +34,17 @@ public class CarController : MonoBehaviour
             onMoveCompleted();
             app.MoveSpeed.x = 0;
         }
-        // 화면 밖에 못나가게 속도 0으로 변경
-        if (this.transform.position.x < -7.3)
+        // 화면 밖에 못나가게 속도 0으로 변경 (clamp를 이용하여 카메라 범위 초과시 최대값, 최솟값으로 x좌표 변경)
+        if (this.transform.position.x < -8)
         {
+            this.transform.position = new Vector3(Mathf.Clamp(this.transform.position.x, -7.5f, 7.5f), transform.position.y, transform.position.z);
             app.MoveSpeed.x = 0;
         }
-        else if (this.transform.position.x > 7)
+        else if (this.transform.position.x > 8)
         {
+            this.transform.position = new Vector3(Mathf.Clamp(this.transform.position.x, -7.5f, 7.5f), transform.position.y, transform.position.z);
             app.MoveSpeed.x = 0;
         }
+
     }
 }
