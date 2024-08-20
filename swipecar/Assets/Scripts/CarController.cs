@@ -7,22 +7,18 @@ public class CarController : MonoBehaviour
 {
     // 받아올 게임오브젝트 타입 변수 선언
     private GameObject touchScreenGo;
-    private GameObject textGo;
     // 받아온 게임오브젝트 타입에 컴포넌트로 들어가있는 스크립트를 받을 변수 선언
     public App app;
-    public GameDirector gameDirector;
     // 대리자 선언
     public Action onMoveCompleted;
     // 이동속도 변수 선언
     private float translateSpeed;
     void Start()
     {
-        // App, GameDirector 스크립트가 컴포넌트로 들어가있는 게임 오브젝트 받기
+        // App 스크립트가 컴포넌트로 들어가있는 게임 오브젝트 받기
         touchScreenGo = GameObject.Find("touchScreen");
-        textGo = GameObject.Find("Text (Legacy)");
         // 게임 오브젝트에서 컴포넌트화 되어있는 스크립트 인스턴스화
         app = touchScreenGo.GetComponent<App>();
-        gameDirector = gameDirector.GetComponent<GameDirector>();
     }
     void Update()
     {
@@ -46,5 +42,4 @@ public class CarController : MonoBehaviour
             app.MoveSpeed.x = 0;
         }
     }
-
 }
