@@ -1,54 +1,50 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    public GameObject flagGo;
-    // 속도 변수
-    public float translateSpeed;
-    // 좌클릭시 좌표
-    public Vector3 mousePosition1;
-    // 우클릭시 좌표
-    public Vector3 mousePosition2;
-    // 우클릭 좌표-좌클릭 좌표 : 좌표 사이의 거리
-    public Vector3 swiperate;
-
-    public float flagDistance;
+    // 받아올 게임오브젝트 타입 변수 선언
+    private GameObject touchScreenGo;
+    private GameObject textGo;
+    // 받아온 게임오브젝트 타입에 컴포넌트로 들어가있는 스크립트를 받을 변수 선언
+    public App app;
+    public GameDirector gameDirector;
+    // 대리자 선언
+    public Action onMoveCompleted;
+    // 이동속도 변수 선언
+    private float translateSpeed;
     void Start()
     {
-      flagGo =   GameObject.Find("flag");
-     
+        // App, GameDirector 스크립트가 컴포넌트로 들어가있는 게임 오브젝트 받기
+        touchScreenGo = GameObject.Find("touchScreen");
+        textGo = GameObject.Find("Text (Legacy)");
+        // 게임 오브젝트에서 컴포넌트화 되어있는 스크립트 인스턴스화
+        app = touchScreenGo.GetComponent<App>();
+        gameDirector = gameDirector.GetComponent<GameDirector>();
     }
-
-
     void Update()
     {
-        // bool 변슈 좌클릭 우클릭시
-        bool isDown = Input.GetMouseButtonDown(0);
-        bool isUp = Input.GetMouseButtonUp(0);
-        // 좌클릭시 좌표 저장
-        if (isDown)
-        {
-            mousePosition1 = Input.mousePosition;
-            Debug.Log(mousePosition1);
-        }
-        // 우클릭시 좌표 저장 및 좌표사이의 거리, 속도 저장
-        else if (isUp)
-        {
-            mousePosition2 = Input.mousePosition;
-            Debug.Log(mousePosition2);
-            swiperate = mousePosition2 - mousePosition1;
-            translateSpeed = swiperate.x * 0.002f;
-            Debug.Log($"이동 거리 : {Mathf.Abs(swiperate.x)}");
-        }
-        // 이동
-        this.transform.Translate(translateSpeed, 0, 0);
-        float distance = flagGo.transform.position.x - this.transform.position.x;
-        Debug.Log($"깃발까지의 거리 : {Mathf.Abs(distance)}M");
-
-
+        // App 스크립트 내부의 이동속도 변수 가져와 이동
+        this.transform.Translate(app.MoveSpeed.x, 0, 0);
         // 이동속도 감소
-        translateSpeed *= 0.96f;
+        app.MoveSpeed.x *= 0.96f;
+        // 0.01~0.001 사이의 속도일 시 대리자 호출하고 이동속도를 0으로 만들어 대리자 연속 호출 방지
+        if (app.MoveSpeed.x < 0.01 && app.MoveSpeed.x > 0.001) 
+        {
+            onMoveCompleted();
+            app.MoveSpeed.x = 0;
+        }
+        // 화면 밖에 못나가게 속도 0으로 변경
+        if (this.transform.position.x < -7.3)
+        {
+            app.MoveSpeed.x = 0;
+        }
+        else if (this.transform.position.x > 7)
+        {
+            app.MoveSpeed.x = 0;
+        }
     }
+
 }

@@ -1,52 +1,46 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class App : MonoBehaviour
 {
-    // 벡터의 뺄셈을 연습
-    // 필드를 만들자 A,B(GameObject
-    public GameObject AGo;
-    public GameObject BGo;
-
-    Vector3 Apos;
-    Vector3 Bpos;
-    // Start is called before the first frame update
+    // 게임오브젝트 타입 변수 선언
+    private GameObject carGo;
+    // 벡터3 타입의 좌표 변수, 이동속도 변수 선언
+    private Vector3 leftPosition;
+    private Vector3 rightPosition;
+    public Vector3 MoveSpeed;
+    // 게임오브젝트 내부의 컴포넌트로 있는 스크립트 CarController 클래스 타입의 변수 선언
+    private CarController carController;
+   
     void Start()
     {
-        Vector3 a = AGo.transform.position;
-        Vector3 b = BGo.transform.position;
-
-        Debug.Log(a);
-        Debug.Log(b);
-        // b - a = c
-        Vector3 c = b - a;
-        Debug.Log(c); // 방향 벡터
-
-        DrawArrow.ForDebug(a, c, 100, Color.yellow, ArrowType.Solid);
-
-        
+        // 스크립트가 컴포넌트화되어있는 게임오브젝트 받음
+        carGo = GameObject.Find("car");
+        // 컴포넌트로 있는 스크립트 받음
+        carController = carGo.GetComponent<CarController>();
     }
 
     private void Update()
     {
-        MousePointer();
-
-    }
-
-    public void MousePointer()
-    {
-        if (Input.GetMouseButtonDown(0))
+        // 이동 완료시 호출할 식람다 형태의 익명메서드
+        carController.onMoveCompleted = () => { Debug.Log("이동이 완료되었습니다."); };
+        // bool 변슈 좌클릭 우클릭시
+        bool isDown = Input.GetMouseButtonDown(0);
+        bool isUp = Input.GetMouseButtonUp(0);
+        // 좌클릭시 좌표 저장
+        if (isDown)
         {
-            Apos = Input.mousePosition;
-            Debug.Log(Apos);
+            leftPosition = Input.mousePosition;
+            Debug.Log(leftPosition);
         }
-        else if (Input.GetMouseButtonUp(0))
+        // 우클릭시 좌표 저장 및 좌표사이의 거리, 속도 저장
+        else if (isUp)
         {
-            Bpos = Input.mousePosition;
-            Debug.Log(Bpos);
-            Vector3 Cpos = Bpos - Apos;
-            Debug.Log(Cpos);
+            rightPosition = Input.mousePosition;
+            Debug.Log(rightPosition);
+            MoveSpeed = (rightPosition-leftPosition)*0.002f;
         }
     }
 }
