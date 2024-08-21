@@ -14,12 +14,14 @@ public class CarController : MonoBehaviour
     public Action onMoveCompleted;
     // 이동속도 변수 선언
     private float translateSpeed;
+    
     void Start()
     {
         // App 스크립트가 컴포넌트로 들어가있는 게임 오브젝트 받기
         touchScreenGo = GameObject.Find("touchScreen");
         // 게임 오브젝트에서 컴포넌트화 되어있는 스크립트 인스턴스화
         app = touchScreenGo.GetComponent<App>();
+        
         
     }
     void Update()
