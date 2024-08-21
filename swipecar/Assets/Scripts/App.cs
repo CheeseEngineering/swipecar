@@ -13,13 +13,17 @@ public class App : MonoBehaviour
     public Vector3 MoveSpeed;
     // 게임오브젝트 내부의 컴포넌트로 있는 스크립트 CarController 클래스 타입의 변수 선언
     private CarController carController;
-   
+    // 오디오 소스 컴포넌트를 저장할 변수 선언
+    public AudioSource AudioSource;
+
     void Start()
     {
         // 스크립트가 컴포넌트화되어있는 게임오브젝트 받음
         carGo = GameObject.Find("car");
         // 컴포넌트로 있는 스크립트 받음
         carController = carGo.GetComponent<CarController>();
+        // 오디오 소스 컴포넌트 가져오기
+        AudioSource = carGo.GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -41,6 +45,9 @@ public class App : MonoBehaviour
             rightPosition = Input.mousePosition;
             Debug.Log(rightPosition);
             MoveSpeed = (rightPosition-leftPosition)*0.002f;
+            // 소리 내기
+            AudioSource.Play();
+            Debug.Log($"부릉");
         }
     }
 }
